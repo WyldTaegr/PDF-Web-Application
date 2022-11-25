@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { Amplify, Auth } from 'aws-amplify';
+import awsconfig from '../aws-exports';
+
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from 'antd';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
  
-const Login = () => {
+const Login = ({signOut, user}) => {
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -30,6 +35,8 @@ const Login = () => {
             }
         }
     }
+
+    
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -68,4 +75,4 @@ const Login = () => {
     )
 }
  
-export default Login
+export default withAuthenticator(Login)

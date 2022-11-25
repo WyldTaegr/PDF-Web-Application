@@ -5,8 +5,12 @@ import jwt_decode from "jwt-decode";
 import Login from './Login';
 import Register from './Register';
 import { Row, Col, Button } from 'antd';
+import { Amplify } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import awsExports from '../aws-exports';
  
-const Navbar = () => {
+const Navbar = ({ signOut, user }) => {
     const [name, setName] = useState('');
     const [token, setToken] = useState('');
     const [expire, setExpire] = useState('');
@@ -31,48 +35,17 @@ const Navbar = () => {
     }
  
     const axiosJWT = axios.create();
- 
-    axiosJWT.interceptors.request.use(async (config) => {
-        const currentDate = new Date();
-        if (expire * 1000 < currentDate.getTime()) {
-            const response = await axios.get('http://localhost:4000/token');
-            config.headers.Authorization = `Bearer ${response.data.accessToken}`;
-            setToken(response.data.accessToken);
-            const decoded = jwt_decode(response.data.accessToken);
-            setName(decoded.name);
-            setExpire(decoded.exp);
-        }
-        return config;
-    }, (error) => {
-        return Promise.reject(error);
-    });
 
-    const Logout = async () => {
-        try {
-            await axios.delete('http://localhost:4000/logout');
-            setName({});
-            if (window.location.pathname === "/"){ //If we are on the homepage, we need to reload
-                window.location.reload(false);
-            }
-            else{ //Otherwise, we need to navigate to the homepage
-                navigate("/");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    if(name) { //If logged in
+    if(user) { //If logged in
         return (
             <>
                 <Row >
-                    <Col span={4}><a href='./'>LOGO LINK</a></Col>
-                    <Col span={16}></Col>
-                    <Col span={4}>
-                        {name} is loggged in
-                        <Button type="primary" onClick={Logout} >
-                            Logout
-                        </Button>
+                    <Col span={4}><a href='./'>LOGO</a></Col>
+                    <Col span={17}></Col>
+                    <Col span={2}>
+                        {user.username}
                     </Col>
+                    <Col span={1}><Button  onClick={signOut} >Logout</Button></Col>
                 </Row>
           </>
         );
@@ -81,17 +54,15 @@ const Navbar = () => {
     else return ( //if not logged in
         <>
             <Row >
-                <Col span={4}><a href='./'>LOGO LINK</a></Col>
+                <Col span={4}><a href='./'>LOGO</a></Col>
                 <Col span={12}></Col>
+                <Col span={4}></Col>
                 <Col span={4}>
-                    <Register />
-                </Col>
-                <Col span={4}>
-                    <Login />
+                <button onClick={signOut}>Sign out</button>
                 </Col>
             </Row>
         </>
     )
 }
  
-export default Navbar
+export default withAuthenticator(Navbar)

@@ -24,5 +24,12 @@
         ]
       }
     }
+  },
+  "storage": {
+    "s3csds393projectstoraged95fa87d": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }
