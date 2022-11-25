@@ -77,7 +77,6 @@ const Homepage = ({}) => {
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
                     <div className="site-layout-content">
-                        <p>Welcome to your homepage {Auth.currentAuthenticatedUser().username}</p>
                         <Button type="primary" onClick={goToDashboard} >
                             Click to Travel to Dashboard
                         </Button>
