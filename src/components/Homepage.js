@@ -5,8 +5,11 @@ import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
 import { Layout, Row, Col, Button } from 'antd';
+import { Auth, Amplify } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import awsExports from '../aws-exports';
  
-const Homepage = () => {
+const Homepage = ({}) => {
     const [name, setName] = useState('');
     const [token, setToken] = useState('');
     const [expire, setExpire] = useState('');
@@ -19,6 +22,7 @@ const Homepage = () => {
     }, []);
  
     const refreshToken = async () => {
+        const { attributes } = await Auth.currentAuthenticatedUser();
         try {
             const response = await axios.get('http://localhost:4000/token');
             setToken(response.data.accessToken);
@@ -36,6 +40,11 @@ const Homepage = () => {
                 navigate("/");
             }
         }
+    }
+
+    async function getUser () { 
+        const user = await Auth.currentAuthenticatedUser();
+        return user
     }
  
     const axiosJWT = axios.create();
@@ -59,7 +68,7 @@ const Homepage = () => {
         navigate("/Dashboard");
     };
     
-    if(name){
+    if(getUser){
         return (
             <>
             <Layout className="layout">
@@ -68,7 +77,6 @@ const Homepage = () => {
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
                     <div className="site-layout-content">
-                        <p>Welcome to your homepage, {name}</p>
                         <Button type="primary" onClick={goToDashboard} >
                             Click to Travel to Dashboard
                         </Button>
@@ -88,7 +96,7 @@ const Homepage = () => {
                 </Header>
                 <Content style={{ padding: '0 50px' }}>
                     <div className="site-layout-content">
-                        <p>Welcome to the homepage. You are not logged in.</p>
+                        <p></p>
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Luis Sergovia Fan Club ©2022 Created by James Redding & Maxwell Ryan</Footer>
