@@ -93,11 +93,11 @@ const Dashboard = ({user}) => {
         //console.log(pdflist)
     }
 
-    function saveDocumentAsync(body) {
+    function saveDocumentAsync(body, filename) {
         const url = URL.createObjectURL(body);
         const a = document.createElement('a');
         a.href = url;
-        a.download = a || 'download';
+        a.download = filename || 'download';
         const clickHandler = () => {
           setTimeout(() => {
             URL.revokeObjectURL(url);
@@ -111,7 +111,7 @@ const Dashboard = ({user}) => {
 
     async function saveDocument(e) {
         const result = await Storage.get(e, { download: true });
-        saveDocumentAsync(result.Body, 'filename');
+        saveDocumentAsync(result.Body, e);
     }
 
     return (
