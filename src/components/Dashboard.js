@@ -14,9 +14,9 @@ const Dashboard = ({user}) => {
     const [loaded, setLoaded] = useState(0);
     const [loadedKey, setLoadedKey] = useState(0);
     const [pdflist, setPdfList] = useState(new Array());
+    const [docURL, setDocURL] = useState('');
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
-
 
     const handleCancel = () => {
         setSelectedFile(null);
@@ -31,10 +31,6 @@ const Dashboard = ({user}) => {
     const showPreview = () => {
         setIsPreviewOpen(true)
     }
-
-    function onDocumentLoadSuccess({ numPages }) {
-        setNumPages(numPages);
-      }
 
     async function handleDownload(e) {
         const result = await Storage.get(e, {download: true});
@@ -69,7 +65,8 @@ const Dashboard = ({user}) => {
                 key: index.toString,
                 name: results[index].key,
                 size: results[index].size + ' B',
-                lastedit: results[index].lastModified.toISOString()
+                lastedit: results[index].lastModified.toISOString(),
+                download: results[index].key,
             }
             setPdfList(pdfListData)
         }
@@ -87,7 +84,8 @@ const Dashboard = ({user}) => {
                 key: index.toString,
                 name: results[index].key,
                 size: results[index].size + ' B',
-                lastedit: results[index].lastModified.toISOString()
+                lastedit: results[index].lastModified.toISOString(),
+                download: 'download'
             }
             setPdfList(pdfListData)
         }
@@ -95,8 +93,8 @@ const Dashboard = ({user}) => {
         //console.log(pdflist)
     }
 
-    function saveDocumentToLocal() {
-        const url = URL.createObjectURL(loaded.Body);
+    function saveDocumentAsync(body) {
+        const url = URL.createObjectURL(body);
         const a = document.createElement('a');
         a.href = url;
         a.download = a || 'download';
@@ -111,6 +109,11 @@ const Dashboard = ({user}) => {
         return a;
     }
 
+    async function saveDocument(e) {
+        const result = await Storage.get(e, { download: true });
+        saveDocumentAsync(result.Body, 'filename');
+    }
+
     return (
         <>
         <Layout className="layout">
@@ -123,10 +126,7 @@ const Dashboard = ({user}) => {
             <Content style={{ padding: '0 50px' }}>
                 <Layout>
                     <Modal title="Document Preview" open={isPreviewOpen} onCancel={closePreview} footer={null}>
-                        <script>
-                            const blobUrl = URL.createObjectURL(loaded);
-                            window.location = blobUrl;
-                        </script>
+                        
                     </Modal>
                 <Divider />
                 <div className="site-layout-content">
@@ -146,6 +146,12 @@ const Dashboard = ({user}) => {
           title: 'Last Edited:',
           dataIndex: 'lastedit',
           key: 'lastedit',
+        },
+        {
+            title: 'Download',
+            dataIndex: 'download',
+            key: 'download',
+            render: (text) => <Button type="primary" onClick={async () => {await saveDocument(text);}}>download</Button>
         }
     ]} dataSource={pdflist} /> </div>
                 </Layout>
