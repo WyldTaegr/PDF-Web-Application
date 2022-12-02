@@ -3,20 +3,22 @@ import React, { useState, useEffect } from 'react'
 import Navbar from "./Navbar";
 import { Auth, Amplify, Storage } from 'aws-amplify';
 import { Breadcrumb, Layout, Button, Modal, Space, Divider, Row, Col, Table, Tag } from 'antd';
-import { Document, Page } from 'react-pdf';
 const { Header, Footer, Sider, Content } = Layout;
 Storage.configure({ level: 'protected' });
 
-const Dashboard = ({user}) => {
+const Dashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [loaded, setLoaded] = useState(0);
     const [loadedKey, setLoadedKey] = useState(0);
     const [pdflist, setPdfList] = useState(new Array());
-    const [docURL, setDocURL] = useState('');
+    const [docBase, setDocBase] = useState('');
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
+    const [pdfString, setPdfString] = useState('')
+
+    
 
     const handleCancel = () => {
         setSelectedFile(null);
@@ -31,13 +33,12 @@ const Dashboard = ({user}) => {
     const showPreview = () => {
         setIsPreviewOpen(true)
     }
-
+    
     async function handleDownload(e) {
         const result = await Storage.get(e, {download: true});
-        setLoaded(result.Blob)
+        const url = URL.createObjectURL(result.Body);
+        setPdfString(url)
         setLoadedKey(e)
-        console.log(loaded)
-        console.log(loadedKey)
         setIsPreviewOpen(true)
     }
 
@@ -66,7 +67,6 @@ const Dashboard = ({user}) => {
                 name: results[index].key,
                 size: results[index].size + ' B',
                 lastedit: results[index].lastModified.toISOString(),
-                download: results[index].key,
             }
             setPdfList(pdfListData)
         }
@@ -92,6 +92,10 @@ const Dashboard = ({user}) => {
         });
         //console.log(pdflist)
     }
+
+    const onDocumentLoadSuccess = ({ numPages }) => {
+        setNumPages(numPages);
+    };
 
     function saveDocumentAsync(body, filename) {
         const url = URL.createObjectURL(body);
@@ -125,8 +129,8 @@ const Dashboard = ({user}) => {
             </Header>       
             <Content style={{ padding: '0 50px' }}>
                 <Layout>
-                    <Modal title="Document Preview" open={isPreviewOpen} onCancel={closePreview} footer={null}>
-                        
+                    <Modal title="Document Preview" open={isPreviewOpen} onCancel={closePreview} footer={null} centered='true' width='1200'>
+                        <embed src={pdfString} width="1200" height="600"></embed>
                     </Modal>
                 <Divider />
                 <div className="site-layout-content">
@@ -146,12 +150,6 @@ const Dashboard = ({user}) => {
           title: 'Last Edited:',
           dataIndex: 'lastedit',
           key: 'lastedit',
-        },
-        {
-            title: 'Download',
-            dataIndex: 'download',
-            key: 'download',
-            render: (text) => <Button type="primary" onClick={async () => {await saveDocument(text);}}>download</Button>
         }
     ]} dataSource={pdflist} /> </div>
                 </Layout>
