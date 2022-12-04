@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from "./Navbar";
 import { Auth, Amplify, Storage } from 'aws-amplify';
 import { Breadcrumb, Layout, Button, Modal, Space, Divider, Row, Col, Table, Tag } from 'antd';
+import { ALLOWED_SPECIAL_CHARACTERS } from '@aws-amplify/ui';
 const { Header, Footer, Sider, Content } = Layout;
 Storage.configure({ level: 'protected' });
 
@@ -13,10 +14,9 @@ const Dashboard = () => {
     const [loaded, setLoaded] = useState(0);
     const [loadedKey, setLoadedKey] = useState(0);
     const [pdflist, setPdfList] = useState(new Array());
-    const [docBase, setDocBase] = useState('');
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
     const [pdfString, setPdfString] = useState('')
+    const [shareDialog, setShareDialog] = useState(false)
+    const [shareString, setShareString] = useState('')
 
     
 
@@ -93,10 +93,6 @@ const Dashboard = () => {
         //console.log(pdflist)
     }
 
-    const onDocumentLoadSuccess = ({ numPages }) => {
-        setNumPages(numPages);
-    };
-
     function saveDocumentAsync(body, filename) {
         const url = URL.createObjectURL(body);
         const a = document.createElement('a');
@@ -118,6 +114,46 @@ const Dashboard = () => {
         saveDocumentAsync(result.Body, e);
     }
 
+    const handleCancelShareDialog = () => {
+        setSelectedFile(null);
+        setIsModalOpen(false);
+        getList();
+    };
+
+    const closeShareDialog = () => {
+        setShareDialog(false)
+    }
+
+    const showShareDialog = () => {
+        setShareDialog(true)
+    }
+
+    async function userExist(userName) {
+        return Auth.signIn( userName, ' ')
+        .then( res => {
+            return false;
+        } )
+        .catch( error => {
+            const code = error.code;
+            console.log( error );
+            switch ( code ) {
+                case 'NotAuthorizedException':
+                    return true;
+                default:
+                    return false;
+            }
+        } );
+    }
+
+    async function shareDocument(event) {
+        event.preventDefault();
+        const userExists = await userExist(shareString)
+        if (userExists) {
+            //Only entered if user exists
+        }
+        
+    }
+
     return (
         <>
         <Layout className="layout">
@@ -130,9 +166,16 @@ const Dashboard = () => {
             <Content style={{ padding: '0 50px' }}>
                 <Layout>
                     <Modal title="Document Preview" open={isPreviewOpen} onCancel={closePreview} footer={null} centered='true' width='1200'>
-                        <embed src={pdfString} width="1200" height="600"></embed>
+                        <Row><Button onClick={showShareDialog}>Share</Button></Row><Divider />
+                        <Modal title="Share" open={shareDialog} onCancel={closeShareDialog} footer={null} centered='true' width='120'>
+                            <form onSubmit={shareDocument}>
+                                <input type="text" id="username" value={shareString} placeholder="Target Username" onChange={(e)=>setShareString(e.target.value)}/>
+                                <input type="submit" value="Submit" />
+                            </form>
+                        </Modal>
+                        <Row><embed src={pdfString} width="1200" height="550"></embed></Row>
                     </Modal>
-                <Divider />
+                    <Divider />
                 <div className="site-layout-content">
                     <Table columns={[
         {
