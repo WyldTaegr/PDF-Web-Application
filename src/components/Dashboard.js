@@ -305,7 +305,7 @@ const Dashboard = () => {
     ]} dataSource={pdfList} /> </div>
                 </Layout>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding & Maxwell Ryan</Footer>
+            <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
         </Layout>
         </>
     )
