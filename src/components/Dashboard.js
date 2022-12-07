@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer} from 'react'
 import Navbar from "./Navbar";
 import { Auth, Amplify, Storage } from 'aws-amplify';
 import { Breadcrumb, Layout, Button, Modal, Space, Divider, Row, Col, Table, Tag } from 'antd';
@@ -21,6 +21,8 @@ const Dashboard = () => {
     const [tag1, setTag1] = useState("")
     const [tag2, setTag2] = useState("")
     const [tag3, setTag3] = useState("")
+
+
 
     const handleCancel = () => {
         setSelectedFile(null);
@@ -49,7 +51,7 @@ const Dashboard = () => {
         const user = await Auth.currentAuthenticatedUser();
         let key = user.username +'/' + file.name
         key = await nameDocument(key)
-        console.log("tags @ upload: " + tag1 + ", " +tag2 + ", " + tag3)
+        //console.log("tags @ upload: " + tag1 + ", " +tag2 + ", " + tag3)
         try {
             await Storage.put(key, file, {
               contentType: "application/pdf", // contentType is optional
@@ -75,12 +77,11 @@ const Dashboard = () => {
             for (let index = 0; index < numpdf; index++) {
                 const realName = list.results[index].key
                 let obj = await Storage.get(realName, {download: true})
-                //console.log(obj.Metadata)
-                let tagList = [3]
+                let tagList = new Array(3)
                 for (let i = 1; i < 4; i++) {
                     tagList[i-1] = obj.Metadata[i]
                 }
-                console.log("Taglist: " + tagList)
+                //console.log("Taglist: " + tagList)
                 pdfListData[index] = {
                     key: index.toString,
                     s3key: realName,
@@ -93,7 +94,7 @@ const Dashboard = () => {
             setPdfList(pdfListData)
         }
         fetchData()
-    }, []);
+    }, [pdfList]);
      
     async function getList() {
         const user = await Auth.currentAuthenticatedUser();
@@ -105,10 +106,10 @@ const Dashboard = () => {
             const realName = list.results[index].key
             let obj = await Storage.get(realName, {download: true})
             console.log(obj.Metadata)
-            let tagList = [3]
-            for (let i = 1; i < 4; i++) {
-                tagList[i-1] = obj.Metadata[i]
-            }
+            let tagList = obj.Metadata.filter()
+            //for (let i = 1; i < 4; i++) {
+            //    tagList[i-1] = obj.Metadata[i]
+            //}
             //console.log("Taglist: " + tagList)
             pdfListData[index] = {
                 key: index.toString,
@@ -120,6 +121,7 @@ const Dashboard = () => {
             }
         }
         setPdfList(pdfListData)
+        this.setState(this.state)
     }
 
     const closeShareDialog = () => {
@@ -212,6 +214,14 @@ const Dashboard = () => {
        setSelectedFile(e.target.files[0])
     }
 
+    async function deleteActive() {
+        await Storage.remove(loadedKey)
+        handleCancel()
+        setIsPreviewOpen(false)
+        setLoaded('')
+        setLoadedKey('')
+    }
+
     return (
         <>
         <Layout className="layout">
@@ -221,7 +231,11 @@ const Dashboard = () => {
             <Content style={{ padding: '0 50px' }}>
                 <Layout>
                     <Modal title="Document Preview" open={isPreviewOpen} onCancel={closePreview} footer={null} centered='true' width='1200'>
-                        <Row><Button onClick={showShareDialog}>Share</Button></Row><Divider />
+                        <Row>
+                            <Col span={2}><Button onClick={showShareDialog}>Share</Button></Col>
+                            <Col span={2}><Button onClick={deleteActive}>Delete</Button></Col>
+                        </Row>
+                        <Divider />
                         <Modal title="Share" open={shareDialog} onCancel={closeShareDialog} footer={null} centered='true' width='120'>
                             <div>
                                 <div>{shareMsg}</div>
