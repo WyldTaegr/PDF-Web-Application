@@ -9,8 +9,7 @@ Storage.configure({ level: 'public' });
 const Dashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-    const [isUploadOpen, setIsUploadOpen] = useState(false);
-    const [selectedFile, setSelectedFile] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
     const [loaded, setLoaded] = useState(0);
     const [loadedKey, setLoadedKey] = useState(0);
     const [pdfList, setPdfList] = useState(new Array());
@@ -18,14 +17,10 @@ const Dashboard = () => {
     const [shareDialog, setShareDialog] = useState(false)
     const [shareString, setShareString] = useState('')
     const [shareMsg, setShareMsg] = useState("")
-    const [tag1, setTag1] = useState("")
-    const [tag2, setTag2] = useState("")
-    const [tag3, setTag3] = useState("")
 
     const handleCancel = () => {
         setSelectedFile(null);
         setIsModalOpen(false);
-        setIsUploadOpen(false)
         getList()
     };
 
@@ -43,21 +38,14 @@ const Dashboard = () => {
         setIsPreviewOpen(true)
     }
 
-    async function handleUpload(fileIn) {
-        console.log(fileIn)
-        const file = fileIn;
+    async function handleUpload(e) {
+        const file = e.target.files[0];
         const user = await Auth.currentAuthenticatedUser();
         let key = user.username +'/' + file.name
         key = await nameDocument(key)
-        console.log("tags @ upload: " + tag1 + ", " +tag2 + ", " + tag3)
         try {
             await Storage.put(key, file, {
               contentType: "application/pdf", // contentType is optional
-              metadata: {
-              ['1']: tag1.toString(),
-              ['2']: tag2.toString(),
-              ['3']: tag3.toString()
-            }  
             });
           } catch (error) {
             console.log("Error uploading file: ", error);
@@ -74,20 +62,13 @@ const Dashboard = () => {
             const pdfListData = new Array(numpdf)
             for (let index = 0; index < numpdf; index++) {
                 const realName = list.results[index].key
-                let obj = await Storage.get(realName, {download: true})
-                //console.log(obj.Metadata)
-                let tagList = [3]
-                for (let i = 1; i < 4; i++) {
-                    tagList[i-1] = obj.Metadata[i]
-                }
-                console.log("Taglist: " + tagList)
                 pdfListData[index] = {
                     key: index.toString,
                     s3key: realName,
                     name: realName.substring(key.length),
                     size: list.results[index].size + ' B',
                     lastedit: list.results[index].lastModified.toISOString(),
-                    tags: tagList
+                    download: 'download'
                 }
             }
             setPdfList(pdfListData)
@@ -102,21 +83,15 @@ const Dashboard = () => {
         const numpdf = list.results.length
         const pdfListData = new Array(numpdf)
         for (let index = 0; index < numpdf; index++) {
+            console.log("key2: " + key.length)
             const realName = list.results[index].key
-            let obj = await Storage.get(realName, {download: true})
-            console.log(obj.Metadata)
-            let tagList = [3]
-            for (let i = 1; i < 4; i++) {
-                tagList[i-1] = obj.Metadata[i]
-            }
-            //console.log("Taglist: " + tagList)
             pdfListData[index] = {
                 key: index.toString,
                 s3key: realName,
                 name: realName.substring(key.length),
                 size: list.results[index].size + ' B',
                 lastedit: list.results[index].lastModified.toISOString(),
-                tags: tagList
+                download: 'download'
             }
         }
         setPdfList(pdfListData)
@@ -128,14 +103,6 @@ const Dashboard = () => {
 
     const showShareDialog = () => {
         setShareDialog(true)
-    }
-
-    const showUpload = () => {
-        setIsUploadOpen(true)
-    }
-
-    const closeUpload = () => {
-        setIsUploadOpen(false)
     }
 
     async function userExist(userName) {
@@ -208,15 +175,14 @@ const Dashboard = () => {
         }
     }
 
-    const handleSelectedFile = (e) => {
-       setSelectedFile(e.target.files[0])
-    }
-
     return (
         <>
         <Layout className="layout">
             <Header style={{ backgroundColor: '#b6d7a8' }}>
                 <Navbar/>
+                <Col flex={0}>
+                    <input type="file" accept=".pdf" className="input" placeholder="Username" value={selectedFile} onChange={handleUpload} />
+                </Col>
             </Header>       
             <Content style={{ padding: '0 50px' }}>
                 <Layout>
@@ -230,27 +196,6 @@ const Dashboard = () => {
                             </div>
                         </Modal>
                         <Row><embed src={pdfString} width="1200" height="550"></embed></Row>
-                    </Modal>
-                    <Divider />
-                    <Button onClick={showUpload}>Upload</Button>
-                    <Modal title="Upload Document" open={isUploadOpen} onCancel={closeUpload} footer={null} centered='true' width='120'>
-                        <Row>
-                                <Col>
-                                <Space direction="vertical">
-                                    <label className="label">Upload a pdf</label>
-                                    <input type="file" accept=".pdf" className="input" placeholder="Username" onChange={handleSelectedFile} />
-                                    <button onClick={() => handleUpload(selectedFile)}>Upload</button>
-                                </Space>
-                                </Col>
-                                <Col >
-                                <Space direction="vertical">
-                                    <input type="text" id="tag1" value={tag1} placeholder="Tag 1" onChange={(e)=>setTag1([e.target.value])}/>
-                                    <input type="text" id="tag2" value={tag2} placeholder="Tag 2" onChange={(e)=>setTag2([e.target.value])}/>
-                                    <input type="text" id="tag3" value={tag3} placeholder="Tag 3" onChange={(e)=>setTag3([e.target.value])}/>
-                                </Space>
-                                </Col>
-                            
-                        </Row>
                     </Modal>
                     <Divider />
                 <div className="site-layout-content">
@@ -270,24 +215,7 @@ const Dashboard = () => {
           title: 'Last Edited:',
           dataIndex: 'lastedit',
           key: 'lastedit',
-        },
-        {
-            title: 'Tags',
-            key: 'tags',
-            dataIndex: 'tags',
-            render: (_, {tags}) => (
-              <Space size = "middle">
-                {tags.map((tag) => {
-                  //let color = '#c3e3c9';
-                  return (
-                    <Tag key={tag}>
-                      {tag.toUpperCase()}
-                    </Tag>
-                  );
-                })}
-              </Space>
-            ),
-          }
+        }
     ]} dataSource={pdfList} /> </div>
                 </Layout>
             </Content>
