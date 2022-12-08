@@ -35,8 +35,6 @@
     font-size: 1.2rem;
     cursor: pointer;
     text-align: center;
-    -webkit-appearance: none;
-    -moz-appearance: none;
   }
   .hero-button:hover {
     background: #63b6b8
