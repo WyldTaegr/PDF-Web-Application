@@ -21,11 +21,10 @@ const Navbar = ({ signOut, user }) => {
             <>
                 <Row >
                     <Col span={4}><a href='./'>LOGO</a></Col>
-                    <Col span={17}></Col>
-                    <Col span={2}>
-                        {user.username}
+                    <Col span={16}>
+                        <h1 style={{ textAlign: "center"}}>PDF Manipulator Tool</h1>
                     </Col>
-                    <Col span={1}><Button  onClick={handleSignOut} >Logout</Button></Col>
+                    <Col span={4} style={{ textAlign: "right"}}><Button  onClick={handleSignOut} >Logout {user.username}</Button></Col>
                 </Row>
           </>
         );
