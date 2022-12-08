@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
 import { Layout, Card, Row, Col } from 'antd';
-import { Auth, Amplify } from 'aws-amplify';
 import '../CSS/HomepageStyles.css';
 import JamesPic from '../images/james.jpg';
 import MaxPic from '../images/max.jpg';
