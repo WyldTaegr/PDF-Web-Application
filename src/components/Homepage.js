@@ -32,18 +32,16 @@ const Homepage = ({}) => {
         return (
             <>
             <Layout className="layout">
-                <Header style={{ backgroundColor: '#b6d7a8' }}>
+            <Header style={{ backgroundColor: '#b6d7a8' }}>
                     <Navbar />
                 </Header>
                 <Content>
                     <div style={{ height: '80vh' }}>
                         <div className='hero-image'>
-                        <div className='hero-text'>
-                            <p>Welcome to the Homepage</p>
-                            <Button type="primary" onClick={goToDashboard} >
+                            <p className='hero-text-title'>Welcome to the Homepage</p>
+                            <button className='hero-button' onClick={goToDashboard} >
                                 Click to Travel to Dashboard
-                            </Button>
-                        </div>
+                            </button>
                         </div>
                     </div>
                 </Content>
