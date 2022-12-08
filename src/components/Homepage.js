@@ -1,15 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
-import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
-import { Layout, Row, Col, Button } from 'antd';
+import { Layout } from 'antd';
 import { Auth, Amplify } from 'aws-amplify';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import awsExports from '../aws-exports';
 import '../CSS/HeroImage.css';
-import heroImage from '../images/hero-image.jpg';
  
 const Homepage = ({}) => {
     const [name, setName] = useState('');
