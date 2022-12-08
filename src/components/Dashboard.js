@@ -3,6 +3,7 @@ import React, { useState, useEffect, useReducer} from 'react'
 import Navbar from "./Navbar";
 import { Auth, Amplify, Storage } from 'aws-amplify';
 import { Breadcrumb, Layout, Button, Modal, Space, Divider, Row, Col, Table, Tag } from 'antd';
+import moment from 'moment';
 const { Header, Footer, Sider, Content } = Layout;
 Storage.configure({ level: 'public' });
 
@@ -87,7 +88,7 @@ const Dashboard = () => {
                     s3key: realName,
                     name: realName.substring(key.length),
                     size: list.results[index].size + ' B',
-                    lastedit: list.results[index].lastModified.toISOString(),
+                    lastedit: moment(list.results[index].lastModified.toISOString()).format('MMMM Do YYYY, h:mm a'),
                     tags: tagList
                 }
             }
