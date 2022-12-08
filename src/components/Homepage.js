@@ -8,6 +8,8 @@ import { Layout, Row, Col, Button } from 'antd';
 import { Auth, Amplify } from 'aws-amplify';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import awsExports from '../aws-exports';
+import '../CSS/HeroImage.css';
+import heroImage from '../images/hero-image.jpg';
  
 const Homepage = ({}) => {
     const [name, setName] = useState('');
@@ -25,7 +27,7 @@ const Homepage = ({}) => {
     const goToDashboard = () => {
         navigate("/Dashboard");
     };
-    
+
     if(getUser){
         return (
             <>
@@ -33,11 +35,16 @@ const Homepage = ({}) => {
                 <Header style={{ backgroundColor: '#b6d7a8' }}>
                     <Navbar />
                 </Header>
-                <Content style={{ padding: '0 50px' }}>
-                    <div className="site-layout-content">
-                        <Button type="primary" onClick={goToDashboard} >
-                            Click to Travel to Dashboard
-                        </Button>
+                <Content>
+                    <div style={{ height: '80vh' }}>
+                        <div className='hero-image'>
+                        <div className='hero-text'>
+                            <p>Welcome to the Homepage</p>
+                            <Button type="primary" onClick={goToDashboard} >
+                                Click to Travel to Dashboard
+                            </Button>
+                        </div>
+                        </div>
                     </div>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
