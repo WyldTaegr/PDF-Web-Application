@@ -72,7 +72,7 @@ const Dashboard = () => {
         const fetchData = async () => {
             const user = await Auth.currentAuthenticatedUser();
             const key = user.username + '/'
-            const list = await Storage.list(key, { level: 'public' })
+            const list = await Storage.list(key, { level: 'public', pageSize: 'ALL' })
             const numpdf = list.results.length
             const pdfListData = new Array(numpdf)
             for (let index = 0; index < numpdf; index++) {
