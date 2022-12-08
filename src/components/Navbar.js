@@ -1,5 +1,6 @@
 import React , { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'antd';
+import { HomeOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { withAuthenticator } from '@aws-amplify/ui-react';
  
@@ -20,7 +21,11 @@ const Navbar = ({ signOut, user }) => {
         return (
             <>
                 <Row >
-                    <Col span={4}><Link to="..">LOGO</Link></Col>
+                    <Col span={4}><Link to="..">
+                    <HomeOutlined 
+                    style={{ fontSize: "32px" }}
+                    />
+                    </Link></Col>
                     <Col span={16}>
                         <h1 style={{ textAlign: "center"}}>PDF Manipulator Tool</h1>
                     </Col>
