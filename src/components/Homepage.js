@@ -4,7 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
 import { Layout, Card, Row, Col } from 'antd';
 import { Auth, Amplify } from 'aws-amplify';
-import '../CSS/HeroImage.css';
+import '../CSS/HomepageStyles.css';
+import JamesPic from '../images/james.jpg';
+import MaxPic from '../images/max.jpg';
+import KerryPic from '../images/kerry.jpg';
+import TigerPic from '../images/tiger.jpg';
+import HirokiPic from '../images/hiroki.jpg';
+import KierenPic from '../images/kieren.jpeg';
  
 const Homepage = ({}) => {
     const navigate = useNavigate();
@@ -21,7 +27,7 @@ const Homepage = ({}) => {
                 <Navbar />
             </Header>
             <Content>
-                <div style={{ height: '80vh' }}>
+                <div style={{ height: '85vh' }}>
                     <div className='hero-image'>
                         <p className='hero-text-title'>Welcome to the Homepage</p>
                         <button className='hero-button' onClick={goToDashboard} >
@@ -29,37 +35,94 @@ const Homepage = ({}) => {
                         </button>
                     </div>
                 </div>
-                <div>
-                    <Row gutter={16}>
+                <div className='hero-section'>
+                    <p className='hero-section-title'>Product Overview</p>
+                    some info about the project and how to use the product or something
+                </div>
+                <div className='hero-section'>
+                    <p className='hero-section-title'>Meet the Team</p>
+                    <Row gutter={[16, 24]}>
                     <Col span={8}>
-                        <Card title="Card title" bordered={false}>
+                        <Card 
+                        hoverable 
+                        title="James Redding"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={JamesPic}
+                            />
+                          }>
                         Card content
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card title="Card title" bordered={false}>
+                        <Card 
+                        hoverable 
+                        title="Maxwell Ryan"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={MaxPic}
+                            />
+                          }>
                         Card content
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card title="Card title" bordered={false}>
-                        Card content
-                        </Card>
-                    </Col>
-                    </Row>
-                    <Row gutter={16}>
-                    <Col span={8}>
-                        <Card title="Card title" bordered={false}>
-                        Card content
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card title="Card title" bordered={false}>
+                        <Card 
+                        hoverable 
+                        title="Kerry Nettles"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={KerryPic}
+                            />
+                          }>
                         Card content
                         </Card>
                     </Col>
                     <Col span={8}>
-                        <Card title="Card title" bordered={false}>
+                        <Card 
+                        hoverable 
+                        title="Tiger Tian"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={TigerPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Hiroki Nakayama"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={HirokiPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Kieran Williams"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={KierenPic}
+                            />
+                          }>
                         Card content
                         </Card>
                     </Col>
