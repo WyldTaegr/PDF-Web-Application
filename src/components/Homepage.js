@@ -9,7 +9,7 @@ import MaxPic from '../images/max.jpg';
 import KerryPic from '../images/kerry.jpg';
 import TigerPic from '../images/tiger.jpg';
 import HirokiPic from '../images/hiroki.jpg';
-import KierenPic from '../images/kieren.jpeg';
+import KierenPic from '../images/kieren.jpg';
  
 const Homepage = ({}) => {
     const navigate = useNavigate();
