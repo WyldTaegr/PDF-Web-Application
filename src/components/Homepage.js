@@ -1,67 +1,137 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
-import axios from 'axios';
-import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
-import { Layout, Row, Col, Button } from 'antd';
-import { Auth, Amplify } from 'aws-amplify';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import awsExports from '../aws-exports';
+import { Layout, Card, Row, Col } from 'antd';
+import '../CSS/HomepageStyles.css';
+import JamesPic from '../images/james.jpg';
+import MaxPic from '../images/max.jpg';
+import KerryPic from '../images/kerry.jpg';
+import TigerPic from '../images/tiger.jpg';
+import HirokiPic from '../images/hiroki.jpg';
+import KierenPic from '../images/kieren.jpeg';
  
 const Homepage = ({}) => {
-    const [name, setName] = useState('');
-    const [token, setToken] = useState('');
-    const [expire, setExpire] = useState('');
-    const [users, setUsers] = useState([]);
     const navigate = useNavigate();
-    const { Header, Footer, Sider, Content } = Layout;
-
-    async function getUser () { 
-        const user = await Auth.currentAuthenticatedUser();
-        return user
-    }
+    const { Header, Footer, Content } = Layout;
 
     const goToDashboard = () => {
         navigate("/Dashboard");
     };
-    
-    if(getUser){
-        return (
-            <>
-            <Layout className="layout">
-                <Header style={{ backgroundColor: '#b6d7a8' }}>
-                    <Navbar />
-                </Header>
-                <Content style={{ padding: '0 50px' }}>
-                    <div className="site-layout-content">
-                        <Button type="primary" onClick={goToDashboard} >
-                            Click to Travel to Dashboard
-                        </Button>
+
+    return (
+        <>
+        <Layout style={{minHeight:"100vh"}}>
+        <Header style={{ backgroundColor: '#b6d7a8' }}>
+                <Navbar />
+            </Header>
+            <Content>
+                <div style={{ height: '85vh' }}>
+                    <div className='hero-image'>
+                        <p className='hero-text-title'>Welcome to the Homepage</p>
+                        <button className='hero-button' onClick={goToDashboard} >
+                            Travel to Dashboard
+                        </button>
                     </div>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
-            </Layout>
-            </>
-        )
-    }
-    else{
-        return (
-            <>
-            <Layout className="layout">
-                <Header style={{ backgroundColor: '#b6d7a8' }}>
-                    <Navbar />
-                </Header>
-                <Content style={{ padding: '0 50px' }}>
-                    <div className="site-layout-content">
-                        <p></p>
-                    </div>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
-            </Layout>
-            </>
-        )
-    }
+                </div>
+                <div className='hero-section'>
+                    <p className='hero-section-title'>Product Overview</p>
+                    some info about the project and how to use the product or something
+                </div>
+                <div className='hero-section'>
+                    <p className='hero-section-title'>Meet the Team</p>
+                    <Row gutter={[16, 24]}>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="James Redding"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={JamesPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Maxwell Ryan"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={MaxPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Kerry Nettles"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={KerryPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Tiger Tian"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={TigerPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Hiroki Nakayama"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={HirokiPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Kieran Williams"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={KierenPic}
+                            />
+                          }>
+                        Card content
+                        </Card>
+                    </Col>
+                    </Row>
+                </div>
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
+        </Layout>
+        </>
+    )
 }
  
 export default Homepage

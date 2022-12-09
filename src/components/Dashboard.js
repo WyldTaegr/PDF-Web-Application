@@ -3,6 +3,7 @@ import React, { useState, useEffect, useReducer} from 'react'
 import Navbar from "./Navbar";
 import { Auth, Amplify, Storage } from 'aws-amplify';
 import { Breadcrumb, Layout, Button, Modal, Space, Divider, Row, Col, Table, Tag } from 'antd';
+import moment from 'moment';
 const { Header, Footer, Sider, Content } = Layout;
 Storage.configure({ level: 'public' });
 
@@ -71,7 +72,7 @@ const Dashboard = () => {
         const fetchData = async () => {
             const user = await Auth.currentAuthenticatedUser();
             const key = user.username + '/'
-            const list = await Storage.list(key, { level: 'public' })
+            const list = await Storage.list(key, { level: 'public', pageSize: 'ALL' })
             const numpdf = list.results.length
             const pdfListData = new Array(numpdf)
             for (let index = 0; index < numpdf; index++) {
@@ -87,7 +88,7 @@ const Dashboard = () => {
                     s3key: realName,
                     name: realName.substring(key.length),
                     size: list.results[index].size + ' B',
-                    lastedit: list.results[index].lastModified.toISOString(),
+                    lastedit: moment(list.results[index].lastModified.toISOString()).format('MMMM Do YYYY, h:mm a'),
                     tags: tagList
                 }
             }
@@ -224,7 +225,7 @@ const Dashboard = () => {
 
     return (
         <>
-        <Layout className="layout">
+        <Layout style={{minHeight:"100vh"}}>
             <Header style={{ backgroundColor: '#b6d7a8' }}>
                 <Navbar/>
             </Header>       

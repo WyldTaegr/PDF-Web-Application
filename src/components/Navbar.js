@@ -1,6 +1,7 @@
 import React , { useState, useEffect } from 'react';
 import { Row, Col, Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { HomeOutlined } from '@ant-design/icons';
+import { useNavigate, Link } from 'react-router-dom';
 import { withAuthenticator } from '@aws-amplify/ui-react';
  
 const Navbar = ({ signOut, user }) => {
@@ -20,12 +21,15 @@ const Navbar = ({ signOut, user }) => {
         return (
             <>
                 <Row >
-                    <Col span={4}><a href='./'>LOGO</a></Col>
-                    <Col span={17}></Col>
-                    <Col span={2}>
-                        {user.username}
+                    <Col span={4}><Link to="..">
+                    <HomeOutlined 
+                    style={{ fontSize: "32px" }}
+                    />
+                    </Link></Col>
+                    <Col span={16}>
+                        <h1 style={{ textAlign: "center"}}>PDF Manipulator Tool</h1>
                     </Col>
-                    <Col span={1}><Button  onClick={handleSignOut} >Logout</Button></Col>
+                    <Col span={4} style={{ textAlign: "right"}}><Button onClick={handleSignOut} >Logout {user.username}</Button></Col>
                 </Row>
           </>
         );
