@@ -9,13 +9,13 @@ const { Header, Footer, Content } = Layout;
 Storage.configure({ level: 'public' });
 
 const Dashboard = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isUploadOpen, setIsUploadOpen] = useState(false);
     const [isMergeOpen, setIsMergeOpen] = useState(false);
     const [isSplitOpen, setIsSplitOpen] = useState(false);
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
     const [isMergeSelectOpen, setIsMergeSelectOpen] = useState(false);
+    const [isTagMenuOpen, setIsTagMenuOpen] = useState(false);
     const [selectedFile, setSelectedFile] = useState('');
     const [loaded, setLoaded] = useState(0);
     const [loadedKey, setLoadedKey] = useState(0);
@@ -50,19 +50,21 @@ const Dashboard = () => {
         let key = user.username +'/' + file.name
         key = await nameDocument(key)
         console.log("tags @ upload: " + tag1 + ", " +tag2 + ", " + tag3)
-        try {
-            await Storage.put(key, file, {
-              contentType: "application/pdf", // contentType is optional
-              metadata: {
-              ['1']: tag1.toString(),
-              ['2']: tag2.toString(),
-              ['3']: tag3.toString()
-            }  
-            });
-          } catch (error) {
-            console.log("Error uploading file: ", error);
-          }
-        handleCancel()
+        if (file) {
+            try {
+                await Storage.put(key, file, {
+                  contentType: "application/pdf", // contentType is optional
+                  metadata: {
+                  ['1']: tag1.toString(),
+                  ['2']: tag2.toString(),
+                  ['3']: tag3.toString()
+                }  
+                });
+              } catch (error) {
+                console.log("Error uploading file: ", error);
+              }
+            handleCancel()
+        }
     }
 
     useEffect(() => {
@@ -185,15 +187,13 @@ const Dashboard = () => {
                   contentType: "application/pdf", // contentType is optional
                 });
                 setShareMsg("")
+                closeShareDialog()
                 handleCancel()
-                setShareDialog(false)
               } catch (error) {
                 setShareMsg("Error uploading file: " + error)
                 console.log("Error uploading file: ", error);
               }
-            
         } else {
-            setShareDialog("")
             setShareMsg("Invalid User")
         }
     }
@@ -201,7 +201,7 @@ const Dashboard = () => {
     async function deleteActive() {
         await Storage.remove(loadedKey)
         handleCancel()
-        setIsPreviewOpen(false)
+        closePreview()
         setLoaded('')
         setLoadedKey('')
         closeDelete()
@@ -316,9 +316,7 @@ const Dashboard = () => {
     }
 
     const handleCancel = () => {
-        //setSelectedFile(null);
-        setIsModalOpen(false);
-        setIsUploadOpen(false)
+        closeUpload()
         getList()
     };
 
@@ -430,6 +428,14 @@ const Dashboard = () => {
                         <InputNumber min={1} max={pageCount} defaultValue={null} onChange={(e) => setSplitIndex(e)} />
                         <Divider />
                         <Button onClick={splitDocument}>Confirm</Button>
+                    </Modal>
+                    <Modal>
+                        <Space direction="vertical">
+                            <input type="text" id="tag1" value={tag1} placeholder="Tag 1" onChange={(e)=>setTag1([e.target.value])}/>
+                            <input type="text" id="tag2" value={tag2} placeholder="Tag 2" onChange={(e)=>setTag2([e.target.value])}/>
+                            <input type="text" id="tag3" value={tag3} placeholder="Tag 3" onChange={(e)=>setTag3([e.target.value])}/>
+                        
+                        </Space>
                     </Modal>
                     <Modal title="Upload Document" open={isUploadOpen} onCancel={closeUpload} footer={null} centered='true' width='120'>
                         <Row>
