@@ -341,6 +341,9 @@ const Dashboard = () => {
 
     const closePreview = () => {
         setIsPreviewOpen(false)
+        setTag1('')
+        setTag2('')
+        setTag3('')
     }
     
     const showShareDialog = () => {
