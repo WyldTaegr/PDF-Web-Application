@@ -382,7 +382,7 @@ const Dashboard = () => {
 
     return (
         <>
-        <Layout className="layout">
+        <Layout className="layout" style={{minHeight:"100vh"}}>
             <Header style={{ backgroundColor: '#b6d7a8' }}>
                 <Navbar/>
             </Header>       
