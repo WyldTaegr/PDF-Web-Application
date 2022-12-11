@@ -40,6 +40,9 @@ const Dashboard = () => {
         const arrayBuffer = await fetch(url).then(res => res.arrayBuffer())
         const documentBase = await PDFDocument.load(arrayBuffer)
         setPageCount(documentBase.getPageCount())
+        setTag1(result.Metadata[1])
+        setTag2(result.Metadata[2])
+        setTag3(result.Metadata[3])
         setIsPreviewOpen(true)
     }
 
@@ -97,28 +100,27 @@ const Dashboard = () => {
      
     async function getList() {
         const user = await Auth.currentAuthenticatedUser();
-        const key = user.username + '/'
-        const list = await Storage.list(key, { level: 'public' })
-        const numpdf = list.results.length
-        const pdfListData = new Array(numpdf)
-        for (let index = 0; index < numpdf; index++) {
-            const realName = list.results[index].key
-            let obj = await Storage.get(realName, {download: true})
-            let tagList = new Array(3)
-            //console.log(obj.Metadata)
-            for (let i = 1; i < 4; i++) {
-                tagList[i-1] = obj.Metadata[i]
+            const key = user.username + '/'
+            const list = await Storage.list(key, { level: 'public', pageSize: 'ALL' })
+            const numpdf = list.results.length
+            const pdfListData = new Array(numpdf)
+            for (let index = 0; index < numpdf; index++) {
+                const realName = list.results[index].key
+                let obj = await Storage.get(realName, {download: true})
+                let tagList = new Array(3)
+                for (let i = 1; i < 4; i++) {
+                    tagList[i-1] = obj.Metadata[i]
+                }
+                pdfListData[index] = {
+                    key: index.toString,
+                    s3key: realName,
+                    name: realName.substring(key.length),
+                    size: list.results[index].size + ' B',
+                    lastedit: moment(list.results[index].lastModified.toISOString()).format('MMMM Do YYYY, h:mm a'),
+                    tags: tagList
+                }
             }
-            pdfListData[index] = {
-                key: index.toString,
-                s3key: realName,
-                name: realName.substring(key.length),
-                size: list.results[index].size + ' B',
-                lastedit: list.results[index].lastModified.toISOString(),
-                tags: tagList
-            }
-        }
-        setPdfList(pdfListData)
+            setPdfList(pdfListData)
     }
 
     async function nameDocument(intitialKey) {
@@ -314,6 +316,23 @@ const Dashboard = () => {
         closePreview()
         handleCancel()
     }
+    
+    async function submitTagChange() {
+        try {
+            await Storage.put(loadedKey, loaded.Body, {
+                contentType: "application/pdf", // contentType is optional
+                metadata: {
+                    ['1']: tag1.toString(),
+                    ['2']: tag2.toString(),
+                    ['3']: tag3.toString()
+                }  
+            });
+        } catch (error) {
+            console.log("Error uploading file: ", error);
+        }
+        closeTagMenu()
+        getList()
+    }
 
     const handleCancel = () => {
         closeUpload()
@@ -366,8 +385,15 @@ const Dashboard = () => {
 
     const closeSplit = () => {
         console.log("split index: " + splitIndex)
-
         setIsSplitOpen(false)
+    }
+
+    const showTagMenu = () => {
+        setIsTagMenuOpen(true)
+    }
+
+    const closeTagMenu = () => {
+        setIsTagMenuOpen(false)
     }
 
     const showDelete = () => {
@@ -391,6 +417,7 @@ const Dashboard = () => {
                             <Col span={2}><Button onClick={showShareDialog}>Share</Button></Col>
                             <Col span={2}><Button onClick={showMerge}>Merge</Button></Col>
                             <Col span={2}><Button onClick={showSplit}>Split</Button></Col>
+                            <Col span={2}><Button onClick={showTagMenu}>Edit Tags</Button></Col>
                             <Col span={2}><Button onClick={showDelete}>Delete</Button></Col>
                         </Row>
                         <Divider />
@@ -429,12 +456,12 @@ const Dashboard = () => {
                         <Divider />
                         <Button onClick={splitDocument}>Confirm</Button>
                     </Modal>
-                    <Modal>
+                    <Modal title="Change Tags" open={isTagMenuOpen} onCancel={closeTagMenu} footer={null} centered='true'>
                         <Space direction="vertical">
                             <input type="text" id="tag1" value={tag1} placeholder="Tag 1" onChange={(e)=>setTag1([e.target.value])}/>
                             <input type="text" id="tag2" value={tag2} placeholder="Tag 2" onChange={(e)=>setTag2([e.target.value])}/>
                             <input type="text" id="tag3" value={tag3} placeholder="Tag 3" onChange={(e)=>setTag3([e.target.value])}/>
-                        
+                            <Button onClick={submitTagChange}>Confirm</Button>
                         </Space>
                     </Modal>
                     <Modal title="Upload Document" open={isUploadOpen} onCancel={closeUpload} footer={null} centered='true' width='120'>
@@ -482,9 +509,9 @@ const Dashboard = () => {
             dataIndex: 'tags',
             render: (_, {tags}) => (
               <Space size = "middle">
-                <Tag>{tags[0]}</Tag>
-                <Tag>{tags[1]}</Tag>
-                <Tag>{tags[2]}</Tag>
+                <Tag>{tags[0].toUpperCase()}</Tag>
+                <Tag>{tags[1].toUpperCase()}</Tag>
+                <Tag>{tags[2].toUpperCase()}</Tag>
               </Space>
             ),
           }
