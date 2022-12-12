@@ -512,9 +512,8 @@ const Dashboard = () => {
             dataIndex: 'tags',
             render: (_, {tags}) => (
               <Space size = "middle">
-                
                 <Tag>{tags[0] && tags[0].toUpperCase()}</Tag>
-                <Tag>{tage[1] && tags[1].toUpperCase()}</Tag>
+                <Tag>{tags[1] && tags[1].toUpperCase()}</Tag>
                 <Tag>{tags[2] && tags[2].toUpperCase()}</Tag>
               </Space>
             ),
