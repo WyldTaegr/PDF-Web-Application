@@ -27,7 +27,7 @@ const Navbar = ({ signOut, user }) => {
                     />
                     </Link></Col>
                     <Col span={16}>
-                        <h1 style={{ textAlign: "center"}}>PDF Manipulator Tool</h1>
+                        <h1 style={{ textAlign: "center"}}>PDF-inator</h1>
                     </Col>
                     <Col span={4} style={{ textAlign: "right"}}><Button onClick={handleSignOut} >Logout {user.username}</Button></Col>
                 </Row>
