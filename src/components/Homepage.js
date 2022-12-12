@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Navbar from "./Navbar";
-import { Layout, Card, Row, Col } from 'antd';
+import { Carousel, Layout, Card, Row, Col } from 'antd';
 import '../CSS/HomepageStyles.css';
 import JamesPic from '../images/james.jpg';
 import MaxPic from '../images/max.jpg';
@@ -10,7 +10,19 @@ import KerryPic from '../images/kerry.jpg';
 import TigerPic from '../images/tiger.jpg';
 import HirokiPic from '../images/hiroki.jpg';
 import KierenPic from '../images/kieren.jpg';
+import mergeGraphic from '../images/mergeGraphic.png'
+import splitGraphic from '../images/splitGraphic.svg'
+import shareGraphic from '../images/shareGraphic.svg'
  
+
+const contentStyle = {
+  height: '160px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: '#364d79',
+};
+
 const Homepage = ({}) => {
     const navigate = useNavigate();
     const { Header, Footer, Content } = Layout;
@@ -35,8 +47,22 @@ const Homepage = ({}) => {
                     </div>
                 </div>
                 <div className='hero-section'>
-                    <p className='hero-section-title'>Product Overview</p>
-                    some info about the project and how to use the product or something
+                    <p className='hero-section-title'>PDF-inator</p>
+                    <p>Organize and edit your documents with ease!</p>
+                    <Carousel autoplay dotPosition='bottom'>
+                      <div className='carousel-section'>
+                        <img className='carousel-image' src={mergeGraphic} alt='merge graphic' />
+                        <h3 style={contentStyle}>Consolidate your documents with the click of a button!</h3>
+                      </div>
+                      <div className='carousel-section'>
+                        <img className='carousel-image' src={splitGraphic} alt='split graphic' />
+                        <h3 style={contentStyle}>Split your document to easily grab the important pieces!</h3>
+                      </div>
+                      <div className='carousel-section'>
+                        <img className='carousel-image' src={shareGraphic} alt='share graphic' />
+                        <h3 style={contentStyle}>Share your results instantly with colleagues!</h3>
+                      </div>
+                    </Carousel>
                 </div>
                 <div className='hero-section'>
                     <p className='hero-section-title'>Meet the Team</p>
@@ -44,29 +70,15 @@ const Homepage = ({}) => {
                     <Col span={8}>
                         <Card 
                         hoverable 
-                        title="James Redding"
+                        title="Tiger Tian"
                         cover={
                             <img
                             style={{ height: "30vh", objectFit: "cover" }}
                               alt="example"
-                              src={JamesPic}
+                              src={TigerPic}
                             />
                           }>
-                        Card content
-                        </Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card 
-                        hoverable 
-                        title="Maxwell Ryan"
-                        cover={
-                            <img
-                            style={{ height: "30vh", objectFit: "cover" }}
-                              alt="example"
-                              src={MaxPic}
-                            />
-                          }>
-                        Card content
+                        Product Manager
                         </Card>
                     </Col>
                     <Col span={8}>
@@ -80,21 +92,35 @@ const Homepage = ({}) => {
                               src={KerryPic}
                             />
                           }>
-                        Card content
+                        Scrum Master
                         </Card>
                     </Col>
                     <Col span={8}>
                         <Card 
                         hoverable 
-                        title="Tiger Tian"
+                        title="James Redding"
                         cover={
                             <img
                             style={{ height: "30vh", objectFit: "cover" }}
                               alt="example"
-                              src={TigerPic}
+                              src={JamesPic}
                             />
                           }>
-                        Card content
+                        Frontend Developer
+                        </Card>
+                    </Col>
+                    <Col span={8}>
+                        <Card 
+                        hoverable 
+                        title="Maxwell Ryan"
+                        cover={
+                            <img
+                            style={{ height: "30vh", objectFit: "cover" }}
+                              alt="example"
+                              src={MaxPic}
+                            />
+                          }>
+                        Frontend Developer
                         </Card>
                     </Col>
                     <Col span={8}>
@@ -108,7 +134,7 @@ const Homepage = ({}) => {
                               src={HirokiPic}
                             />
                           }>
-                        Card content
+                        Backend Developer
                         </Card>
                     </Col>
                     <Col span={8}>
@@ -122,7 +148,7 @@ const Homepage = ({}) => {
                               src={KierenPic}
                             />
                           }>
-                        Card content
+                        Backend Developer
                         </Card>
                     </Col>
                     </Row>

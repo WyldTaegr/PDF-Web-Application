@@ -49,6 +49,7 @@
   margin-right: 20vh;
   margin-left: 20vh;
   margin-bottom: 0px;
+  text-align: center;
 }
 
 .hero-section-title {
@@ -56,4 +57,21 @@
   font-weight: bold;
   font-size: 5vmin;
   margin-bottom: 2vh;
+}
+
+.carousel-section {
+  height: 380px;
+  width: 80vw;
+  background-color: #364d79;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.carousel-image {
+  max-width: 30vw;
+  max-height: 160px;
+  margin-top: 80px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
