@@ -17,10 +17,11 @@ import shareGraphic from '../images/shareGraphic.svg'
 
 const contentStyle = {
   height: '160px',
+  width: '100%',
   color: '#fff',
   lineHeight: '160px',
   textAlign: 'center',
-  background: '#364d79',
+  background: '#7BB5FF',
 };
 
 const Homepage = ({}) => {
@@ -46,25 +47,21 @@ const Homepage = ({}) => {
                         </button>
                     </div>
                 </div>
-                <div className='hero-section'>
-                    <p className='hero-section-title'>PDF-inator</p>
-                    <p>Organize and edit your documents with ease!</p>
-                    <Carousel autoplay dotPosition='bottom'>
-                      <div className='carousel-section'>
-                        <img className='carousel-image' src={mergeGraphic} alt='merge graphic' />
-                        <h3 style={contentStyle}>Consolidate your documents with the click of a button!</h3>
-                      </div>
-                      <div className='carousel-section'>
-                        <img className='carousel-image' src={splitGraphic} alt='split graphic' />
-                        <h3 style={contentStyle}>Split your document to easily grab the important pieces!</h3>
-                      </div>
-                      <div className='carousel-section'>
-                        <img className='carousel-image' src={shareGraphic} alt='share graphic' />
-                        <h3 style={contentStyle}>Share your results instantly with colleagues!</h3>
-                      </div>
-                    </Carousel>
-                </div>
-                <div className='hero-section'>
+                  <Carousel autoplay dotPosition='bottom'>
+                    <div className='carousel-section'>
+                      <img className='carousel-image' src={mergeGraphic} alt='merge graphic' />
+                      <h3 style={contentStyle}>Consolidate your documents with the click of a button!</h3>
+                    </div>
+                    <div className='carousel-section'>
+                      <img className='carousel-image' src={splitGraphic} alt='split graphic' />
+                      <h3 style={contentStyle}>Split your document to easily grab the important pieces!</h3>
+                    </div>
+                    <div className='carousel-section'>
+                      <img className='carousel-image' src={shareGraphic} alt='share graphic' />
+                      <h3 style={contentStyle}>Share your results instantly with colleagues!</h3>
+                    </div>
+                  </Carousel>
+                <div className='hero-section' style={{ backgroundColor: '#F0EEDF'}}>
                     <p className='hero-section-title'>Meet the Team</p>
                     <Row gutter={[16, 24]}>
                     <Col span={8}>
@@ -98,7 +95,7 @@ const Homepage = ({}) => {
                     <Col span={8}>
                         <Card 
                         hoverable 
-                        title="James Redding"
+                        title="James Redding (left)"
                         cover={
                             <img
                             style={{ height: "30vh", objectFit: "cover" }}
@@ -154,7 +151,7 @@ const Homepage = ({}) => {
                     </Row>
                 </div>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
+            <Footer style={{ textAlign: 'center', backgroundColor: '#b6d7a8' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
         </Layout>
         </>
     )
