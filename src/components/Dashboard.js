@@ -413,8 +413,8 @@ const Dashboard = () => {
             <Header style={{ backgroundColor: '#b6d7a8' }}>
                 <Navbar/>
             </Header>       
-            <Content style={{ padding: '0 50px' }}>
-                <Layout>
+            <Content style={{ padding: '0 50px', backgroundColor: '#F0EEDF' }}>
+                <Layout style={{ backgroundColor: '#F0EEDF' }}>
                     <Modal title="Document Preview" open={isPreviewOpen} onCancel={closePreview} footer={null} centered='true' width='1200'>
                         <Row>
                             <Col span={2}><Button onClick={showShareDialog}>Share</Button></Col>
@@ -521,7 +521,7 @@ const Dashboard = () => {
     ]} dataSource={pdfList} /> </div>
                 </Layout>
             </Content>
-            <Footer style={{ textAlign: 'center' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
+            <Footer style={{ textAlign: 'center', backgroundColor: '#b6d7a8' }}>Luis Segovia Fan Club ©2022 Created by James Redding, Maxwell Ryan, Kerry Nettles, Tiger Tian, Hiroki Nakayama, & Kieran Williams</Footer>
         </Layout>
         </>
     )
