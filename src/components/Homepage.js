@@ -41,7 +41,7 @@ const Homepage = ({}) => {
             <Content>
                 <div style={{ height: '85vh' }}>
                     <div className='hero-image'>
-                        <p className='hero-text-title'>Welcome to the Homepage</p>
+                        <p className='hero-text-title'>Free PDF Storage and Manipulation</p>
                         <button className='hero-button' onClick={goToDashboard} >
                             Travel to Dashboard
                         </button>
